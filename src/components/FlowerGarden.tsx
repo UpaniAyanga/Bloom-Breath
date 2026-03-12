@@ -1,4 +1,5 @@
 import Flower from './Flower'
+import VinePath from './VinePath'
 
 export interface GardenFlower {
   id: string
@@ -10,14 +11,15 @@ export interface GardenFlower {
 
 interface FlowerGardenProps {
   flowers: GardenFlower[]
+  progress: number
 }
 
-export default function FlowerGarden({ flowers }: FlowerGardenProps) {
+export default function FlowerGarden({ flowers, progress }: FlowerGardenProps) {
   return (
     <section className="rounded-3xl border border-[#E9E4DB] bg-[#FDFBF7] p-4 shadow-[0_8px_30px_rgba(131,140,127,0.12)]">
       <div className="mb-3 flex items-center justify-between">
-        <h2 className="text-base font-medium text-[#566458]">Your Garden</h2>
-        <span className="text-xs text-[#8A8A87]">{flowers.length} blooms</span>
+        <h2 className="text-sm font-medium tracking-[0.12em] uppercase text-[#6B705C]">Your breathing garden</h2>
+        <span className="text-xs tracking-[0.08em] text-[#8A8A87]">{flowers.length} blooms</span>
       </div>
 
       <div
@@ -28,10 +30,12 @@ export default function FlowerGarden({ flowers }: FlowerGardenProps) {
           backgroundSize: '34px 34px',
         }}
       >
+        <VinePath progress={progress} />
+
         {flowers.map((flower, index) => (
           <div
             key={flower.id}
-            className="absolute"
+            className="absolute z-[2]"
             style={{ left: `${flower.x}%`, top: `${flower.y}%` }}
           >
             <Flower
@@ -45,7 +49,7 @@ export default function FlowerGarden({ flowers }: FlowerGardenProps) {
         ))}
 
         {flowers.length === 0 && (
-          <div className="flex h-full items-center justify-center">
+          <div className="relative z-[2] flex h-full items-center justify-center">
             <p className="text-sm text-[#8F9A89]">Complete a breathing session to plant your first flower.</p>
           </div>
         )}

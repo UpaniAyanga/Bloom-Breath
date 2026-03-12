@@ -1,6 +1,6 @@
-import { useEffect, useMemo, useRef } from 'react'
+import { useEffect, useRef } from 'react'
 import BreathingCircle from '../components/BreathingCircle'
-import Flower, { type FlowerStage } from '../components/Flower'
+import Garden from '../components/Garden'
 import TimerDisplay from '../components/TimerDisplay'
 import type { BreathingTechnique } from '../data/breathingTechniques'
 import { useBreathingTimer } from '../hooks/useBreathingTimer'
@@ -9,22 +9,14 @@ interface TimerPageProps {
   technique: BreathingTechnique
   onBack: () => void
   onSessionComplete: () => void
-}
-
-const flowerColors = ['#AFC8A6', '#CAB8DE', '#E7BDCA', '#F2E3CD', '#B4D8CF']
-
-function stageFromProgress(progress: number): FlowerStage {
-  if (progress < 20) return 'seed'
-  if (progress < 40) return 'sprout'
-  if (progress < 60) return 'stem'
-  if (progress < 80) return 'bud'
-  return 'flower'
+  onProgressChange: (progress: number) => void
 }
 
 export default function TimerPage({
   technique,
   onBack,
   onSessionComplete,
+  onProgressChange,
 }: TimerPageProps) {
   const completionHandledRef = useRef(false)
   const {
@@ -40,20 +32,6 @@ export default function TimerPage({
     totalDurationSeconds: technique.totalDurationSeconds,
   })
 
-  const orbitFlowers = useMemo(
-    () =>
-      Array.from({ length: 10 }, (_, index) => {
-        const angle = (index / 10) * Math.PI * 2
-        return {
-          x: Math.cos(angle) * 148,
-          y: Math.sin(angle) * 148,
-          color: flowerColors[index % flowerColors.length],
-          delay: index * 0.1,
-        }
-      }),
-    [],
-  )
-
   useEffect(() => {
     if (progress < 100 || isRunning || completionHandledRef.current) {
       return
@@ -65,6 +43,10 @@ export default function TimerPage({
     return () => clearTimeout(timeout)
   }, [isRunning, onBack, onSessionComplete, progress])
 
+  useEffect(() => {
+    onProgressChange(progress)
+  }, [onProgressChange, progress])
+
   const handleReset = () => {
     completionHandledRef.current = false
     resetTimer()
@@ -73,47 +55,33 @@ export default function TimerPage({
   const hasFinished = progress >= 100 && !isRunning
 
   return (
-    <main className="mx-auto min-h-screen w-full max-w-[480px] px-4 py-6">
+    <main className="mx-auto flex min-h-screen w-full max-w-[480px] flex-col items-center px-6 py-12">
       <button
         onClick={onBack}
-        className="rounded-full border border-[#DED9D1] px-3 py-1.5 text-xs font-medium text-[#6B7268]"
+        className="self-start rounded-full border border-[#DED9D1] px-3 py-1.5 text-xs font-medium text-[#6B7268]"
       >
         Back
       </button>
 
-      <header className="mt-4 text-center">
-        <h1 className="text-xl font-semibold text-[#566458]">{technique.name}</h1>
-        <p className="mt-1 text-xs text-[#8C9087]">{technique.description}</p>
+      <header className="mt-6 text-center">
+        <h1 className="text-3xl font-medium tracking-[0.02em] text-[#3A3A3A]">Breathe and Bloom</h1>
+        <p className="mt-2 text-sm text-[#6F7568]">Grow calm with every breath</p>
+        <p className="mt-1 text-xs font-medium tracking-[0.15em] text-[#8C9087] uppercase">{technique.name}</p>
       </header>
 
-      <section className="relative mt-8 flex min-h-[420px] items-center justify-center overflow-hidden rounded-3xl bg-[#FDFBF7] shadow-[0_14px_44px_rgba(131,140,127,0.16)]">
-        {orbitFlowers.map((flower, index) => {
-          const localProgress = Math.max(0, Math.min(100, (progress - index * 7) * 1.5))
-          const stage = stageFromProgress(localProgress)
+      <section className="mt-8 flex w-full flex-col items-center rounded-3xl bg-[#FDFBF7]/65 p-6 shadow-[0_14px_44px_rgba(131,140,127,0.14)]">
+        <BreathingCircle currentPhase={currentPhase} />
 
-          return (
-            <div
-              key={`${flower.x}-${flower.y}`}
-              className="pointer-events-none absolute"
-              style={{
-                transform: `translate(${flower.x}px, ${flower.y}px)`,
-              }}
-            >
-              <Flower stage={stage} color={flower.color} size={56} delay={flower.delay} />
-            </div>
-          )
-        })}
+        <TimerDisplay
+          currentPhase={currentPhase}
+          secondsRemaining={secondsRemaining}
+          progress={progress}
+        />
 
-        <BreathingCircle currentPhase={currentPhase}>
-          <TimerDisplay
-            currentPhase={currentPhase}
-            secondsRemaining={secondsRemaining}
-            progress={progress}
-          />
-        </BreathingCircle>
+        <Garden progress={progress} />
       </section>
 
-      <div className="mt-4 h-2 overflow-hidden rounded-full bg-[#E7E2D8]">
+      <div className="mt-5 h-2 w-full overflow-hidden rounded-full bg-[#E7E2D8]">
         <div
           className="h-full rounded-full bg-[#A9BCA2] transition-[width] duration-500"
           style={{ width: `${progress}%` }}
@@ -126,7 +94,7 @@ export default function TimerPage({
         </p>
       )}
 
-      <div className="mt-4 flex items-center justify-center gap-2">
+      <div className="mt-5 flex items-center justify-center gap-2">
         {!isRunning ? (
           <button
             onClick={startTimer}
