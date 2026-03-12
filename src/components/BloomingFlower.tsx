@@ -113,29 +113,32 @@ export default function BloomingFlower({
         const revealStart = index * 0.07
         const localBloom = clamp((petalProgress - revealStart) / (1 - revealStart))
         return (
-          <motion.g
+          <g
             key={`petal-${angle}`}
             transform={`rotate(${angle} ${centerX} ${centerY})`}
-            initial={false}
-            animate={{ opacity: localBloom, scale: 0.2 + localBloom * 0.8 }}
-            transition={{ duration: shouldReduceMotion ? 0.2 : 0.8, ease: 'easeOut' }}
-            style={{ transformOrigin: `${centerX}px ${centerY}px` }}
           >
-            <path
-              d={`M ${centerX} ${centerY} C ${centerX - 13} ${centerY - 14}, ${centerX - 16} ${centerY - 45}, ${centerX} ${centerY - 68} C ${centerX + 16} ${centerY - 45}, ${centerX + 13} ${centerY - 14}, ${centerX} ${centerY}`}
-              fill={`url(#${petalGradientId})`}
-              stroke={variant.outline}
-              strokeWidth="1.6"
-            />
-            <path
-              d={`M ${centerX - 4} ${centerY - 28} C ${centerX - 8} ${centerY - 41}, ${centerX - 8} ${centerY - 53}, ${centerX - 1} ${centerY - 60}`}
-              fill="none"
-              stroke={variant.petalHighlight}
-              strokeOpacity="0.85"
-              strokeWidth="2"
-              strokeLinecap="round"
-            />
-          </motion.g>
+            <motion.g
+              initial={false}
+              animate={{ opacity: localBloom, scale: 0.2 + localBloom * 0.8 }}
+              transition={{ duration: shouldReduceMotion ? 0.2 : 0.8, ease: 'easeOut' }}
+              style={{ transformOrigin: `${centerX}px ${centerY}px` }}
+            >
+              <path
+                d={`M ${centerX} ${centerY} C ${centerX - 13} ${centerY - 14}, ${centerX - 16} ${centerY - 45}, ${centerX} ${centerY - 68} C ${centerX + 16} ${centerY - 45}, ${centerX + 13} ${centerY - 14}, ${centerX} ${centerY}`}
+                fill={`url(#${petalGradientId})`}
+                stroke={variant.outline}
+                strokeWidth="1.6"
+              />
+              <path
+                d={`M ${centerX - 4} ${centerY - 28} C ${centerX - 8} ${centerY - 41}, ${centerX - 8} ${centerY - 53}, ${centerX - 1} ${centerY - 60}`}
+                fill="none"
+                stroke={variant.petalHighlight}
+                strokeOpacity="0.85"
+                strokeWidth="2"
+                strokeLinecap="round"
+              />
+            </motion.g>
+          </g>
         )
       })}
 
