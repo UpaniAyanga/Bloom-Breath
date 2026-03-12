@@ -1,11 +1,18 @@
 import { AnimatePresence, motion, useReducedMotion } from 'framer-motion'
+import type { BloomVariant } from '../data/bloomVariants'
+import BloomingFlower from './BloomingFlower'
 
 interface CompletionModalProps {
   isOpen: boolean
+  bloomVariant: BloomVariant
   onClose: () => void
 }
 
-export default function CompletionModal({ isOpen, onClose }: CompletionModalProps) {
+export default function CompletionModal({
+  isOpen,
+  bloomVariant,
+  onClose,
+}: CompletionModalProps) {
   const shouldReduceMotion = useReducedMotion()
 
   return (
@@ -29,6 +36,9 @@ export default function CompletionModal({ isOpen, onClose }: CompletionModalProp
             <h2 className="mt-2 text-2xl font-medium tracking-[0.01em] text-[#44503E]">
               Beautiful bloom
             </h2>
+            <div className="my-2 flex justify-center">
+              <BloomingFlower progress={100} size={144} variant={bloomVariant} />
+            </div>
             <p className="mt-2 text-sm text-[#6D7366]">
               Your full flower has blossomed. You completed this breathing session beautifully.
             </p>
