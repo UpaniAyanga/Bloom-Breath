@@ -9,6 +9,7 @@ interface TimerPageProps {
   technique: BreathingTechnique
   onBack: () => void
   onSessionComplete: () => void
+  onProgressChange: (progress: number) => void
 }
 
 const flowerColors = ['#AFC8A6', '#CAB8DE', '#E7BDCA', '#F2E3CD', '#B4D8CF']
@@ -25,6 +26,7 @@ export default function TimerPage({
   technique,
   onBack,
   onSessionComplete,
+  onProgressChange,
 }: TimerPageProps) {
   const completionHandledRef = useRef(false)
   const {
@@ -64,6 +66,10 @@ export default function TimerPage({
     const timeout = setTimeout(() => onBack(), 1400)
     return () => clearTimeout(timeout)
   }, [isRunning, onBack, onSessionComplete, progress])
+
+  useEffect(() => {
+    onProgressChange(progress)
+  }, [onProgressChange, progress])
 
   const handleReset = () => {
     completionHandledRef.current = false

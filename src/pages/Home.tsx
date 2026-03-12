@@ -7,6 +7,7 @@ import type { BreathingTechnique } from '../data/breathingTechniques'
 interface HomeProps {
   techniques: BreathingTechnique[]
   gardenFlowers: GardenFlower[]
+  gardenProgress: number
   onStartTechnique: (technique: BreathingTechnique) => void
   onCreateCustomTechnique: (technique: BreathingTechnique) => void
 }
@@ -14,6 +15,7 @@ interface HomeProps {
 export default function Home({
   techniques,
   gardenFlowers,
+  gardenProgress,
   onStartTechnique,
   onCreateCustomTechnique,
 }: HomeProps) {
@@ -52,7 +54,7 @@ export default function Home({
       </section>
 
       <section className="mt-5">
-        <FlowerGarden flowers={gardenFlowers} />
+        <FlowerGarden flowers={gardenFlowers} progress={gardenProgress} />
       </section>
 
       <CustomTimerModal
