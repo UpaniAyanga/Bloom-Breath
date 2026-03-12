@@ -3,21 +3,22 @@ import BloomingFlower from '../components/BloomingFlower'
 import BreathingCircle from '../components/BreathingCircle'
 import CompletionModal from '../components/CompletionModal'
 import TimerDisplay from '../components/TimerDisplay'
+import type { BloomVariant } from '../data/bloomVariants'
 import type { BreathingTechnique } from '../data/breathingTechniques'
 import { useBreathingTimer } from '../hooks/useBreathingTimer'
 
 interface TimerPageProps {
   technique: BreathingTechnique
+  bloomVariant: BloomVariant
   onBack: () => void
   onSessionComplete: () => void
-  onProgressChange: (progress: number) => void
 }
 
 export default function TimerPage({
   technique,
+  bloomVariant,
   onBack,
   onSessionComplete,
-  onProgressChange,
 }: TimerPageProps) {
   const completionHandledRef = useRef(false)
   const [completionDismissed, setCompletionDismissed] = useState(false)
@@ -44,10 +45,6 @@ export default function TimerPage({
     onSessionComplete()
   }, [isRunning, onSessionComplete, progress])
 
-  useEffect(() => {
-    onProgressChange(progress)
-  }, [onProgressChange, progress])
-
   const handleReset = () => {
     completionHandledRef.current = false
     setCompletionDismissed(false)
@@ -67,6 +64,7 @@ export default function TimerPage({
       </button>
 
       <header className="mt-6 text-center">
+        <img src="/flower-logo.svg" alt="Bloom Breath logo" className="mx-auto mb-2 h-12 w-12" />
         <h1 className="text-3xl font-medium tracking-[0.02em] text-[#3A3A3A]">Breathe and Bloom</h1>
         <p className="mt-2 text-sm text-[#6F7568]">Watch your flower bloom with every breath</p>
         <p className="mt-1 text-xs font-medium tracking-[0.15em] text-[#8C9087] uppercase">{technique.name}</p>
@@ -74,7 +72,7 @@ export default function TimerPage({
 
       <section className="mt-8 flex w-full flex-col items-center rounded-3xl bg-[#FDFBF7]/65 p-6 shadow-[0_14px_44px_rgba(131,140,127,0.14)]">
         <BreathingCircle currentPhase={currentPhase}>
-          <BloomingFlower progress={progress} />
+          <BloomingFlower progress={progress} size={182} variant={bloomVariant} />
         </BreathingCircle>
 
         <TimerDisplay
@@ -118,6 +116,7 @@ export default function TimerPage({
 
       <CompletionModal
         isOpen={showCompletionModal}
+        bloomVariant={bloomVariant}
         onClose={() => {
           setCompletionDismissed(true)
           onBack()

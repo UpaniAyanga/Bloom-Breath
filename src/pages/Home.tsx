@@ -7,7 +7,6 @@ import type { BreathingTechnique } from '../data/breathingTechniques'
 interface HomeProps {
   techniques: BreathingTechnique[]
   gardenFlowers: GardenFlower[]
-  gardenProgress: number
   onStartTechnique: (technique: BreathingTechnique) => void
   onCreateCustomTechnique: (technique: BreathingTechnique) => void
 }
@@ -15,7 +14,6 @@ interface HomeProps {
 export default function Home({
   techniques,
   gardenFlowers,
-  gardenProgress,
   onStartTechnique,
   onCreateCustomTechnique,
 }: HomeProps) {
@@ -24,6 +22,7 @@ export default function Home({
   return (
     <main className="mx-auto min-h-screen w-full max-w-[480px] px-6 py-12">
       <header className="mb-8 text-center">
+        <img src="/flower-logo.svg" alt="Bloom Breath logo" className="mx-auto mb-2 h-14 w-14" />
         <p className="text-xs font-medium tracking-[0.24em] text-[#8F9A89]">BLOOM BREATH</p>
         <h1 className="mt-2 text-3xl font-medium tracking-[0.02em] text-[#3A3A3A]">Breathe and Bloom</h1>
         <p className="mt-2 text-sm text-[#6F7568]">
@@ -54,7 +53,7 @@ export default function Home({
       </section>
 
       <section className="mt-5">
-        <FlowerGarden flowers={gardenFlowers} progress={gardenProgress} />
+        <FlowerGarden flowers={gardenFlowers} />
       </section>
 
       <CustomTimerModal
