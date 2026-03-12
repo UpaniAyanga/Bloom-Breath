@@ -14,6 +14,14 @@ interface FlowerGardenProps {
   progress: number
 }
 
+function seedFromId(id: string) {
+  let seed = 0
+  for (let index = 0; index < id.length; index += 1) {
+    seed = (seed * 31 + id.charCodeAt(index)) >>> 0
+  }
+  return seed || 1001
+}
+
 export default function FlowerGarden({ flowers, progress }: FlowerGardenProps) {
   return (
     <section className="rounded-3xl border border-[#E9E4DB] bg-[#FDFBF7] p-4 shadow-[0_8px_30px_rgba(131,140,127,0.12)]">
@@ -23,7 +31,7 @@ export default function FlowerGarden({ flowers, progress }: FlowerGardenProps) {
       </div>
 
       <div
-        className="relative h-52 overflow-hidden rounded-2xl bg-[#F7F4EE]"
+        className="relative h-64 overflow-hidden rounded-2xl bg-[#F7F4EE]"
         style={{
           backgroundImage:
             'linear-gradient(rgba(170,184,166,0.15) 1px, transparent 1px), linear-gradient(90deg, rgba(170,184,166,0.15) 1px, transparent 1px)',
@@ -35,7 +43,7 @@ export default function FlowerGarden({ flowers, progress }: FlowerGardenProps) {
         {flowers.map((flower, index) => (
           <div
             key={flower.id}
-            className="absolute z-[2]"
+            className="absolute z-[2] drop-shadow-[0_10px_12px_rgba(85,95,80,0.22)]"
             style={{ left: `${flower.x}%`, top: `${flower.y}%` }}
           >
             <Flower
@@ -44,6 +52,7 @@ export default function FlowerGarden({ flowers, progress }: FlowerGardenProps) {
               size={flower.size}
               float
               delay={index * 0.18}
+              seed={seedFromId(flower.id)}
             />
           </div>
         ))}

@@ -6,15 +6,15 @@ import SkyGradient from './components/SkyGradient'
 import Home from './pages/Home'
 import TimerPage from './pages/TimerPage'
 
-const gardenColors = ['#AFC8A6', '#CAB8DE', '#E7BDCA', '#F2E3CD', '#B4D8CF']
+const gardenColors = ['#FFC8DD', '#FFAFCC', '#CDB4DB', '#BDE0FE', '#A2D2FF', '#FFD6A5']
 
 function createGardenFlower(): GardenFlower {
   return {
     id: `garden-${Date.now()}-${Math.random().toString(36).slice(2, 6)}`,
     color: gardenColors[Math.floor(Math.random() * gardenColors.length)],
-    x: 6 + Math.random() * 82,
-    y: 8 + Math.random() * 76,
-    size: 56 + Math.random() * 18,
+    x: 8 + Math.random() * 80,
+    y: 20 + Math.random() * 52,
+    size: 82 + Math.random() * 24,
   }
 }
 
