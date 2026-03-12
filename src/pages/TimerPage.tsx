@@ -1,6 +1,7 @@
-import { useEffect, useRef } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import BloomingFlower from '../components/BloomingFlower'
 import BreathingCircle from '../components/BreathingCircle'
+import CompletionModal from '../components/CompletionModal'
 import TimerDisplay from '../components/TimerDisplay'
 import type { BreathingTechnique } from '../data/breathingTechniques'
 import { useBreathingTimer } from '../hooks/useBreathingTimer'
@@ -19,6 +20,7 @@ export default function TimerPage({
   onProgressChange,
 }: TimerPageProps) {
   const completionHandledRef = useRef(false)
+  const [completionDismissed, setCompletionDismissed] = useState(false)
   const {
     currentPhase,
     secondsRemaining,
@@ -28,6 +30,7 @@ export default function TimerPage({
     pauseTimer,
     resetTimer,
   } = useBreathingTimer({
+    // Progress is normalized against the selected session duration.
     steps: technique.steps,
     totalDurationSeconds: technique.totalDurationSeconds,
   })
@@ -39,9 +42,7 @@ export default function TimerPage({
 
     completionHandledRef.current = true
     onSessionComplete()
-    const timeout = setTimeout(() => onBack(), 1400)
-    return () => clearTimeout(timeout)
-  }, [isRunning, onBack, onSessionComplete, progress])
+  }, [isRunning, onSessionComplete, progress])
 
   useEffect(() => {
     onProgressChange(progress)
@@ -49,10 +50,12 @@ export default function TimerPage({
 
   const handleReset = () => {
     completionHandledRef.current = false
+    setCompletionDismissed(false)
     resetTimer()
   }
 
   const hasFinished = progress >= 100 && !isRunning
+  const showCompletionModal = hasFinished && !completionDismissed
 
   return (
     <main className="mx-auto flex min-h-screen w-full max-w-[480px] flex-col items-center px-6 py-12">
@@ -88,12 +91,6 @@ export default function TimerPage({
         />
       </div>
 
-      {hasFinished && (
-        <p className="mt-3 text-center text-sm text-[#73806D]">
-          Session complete. Your flower has been added to the garden.
-        </p>
-      )}
-
       <div className="mt-5 flex items-center justify-center gap-2">
         {!isRunning ? (
           <button
@@ -118,6 +115,14 @@ export default function TimerPage({
           Reset
         </button>
       </div>
+
+      <CompletionModal
+        isOpen={showCompletionModal}
+        onClose={() => {
+          setCompletionDismissed(true)
+          onBack()
+        }}
+      />
     </main>
   )
 }
