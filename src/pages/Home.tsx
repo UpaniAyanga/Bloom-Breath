@@ -22,12 +22,12 @@ export default function Home({
   const [isCustomModalOpen, setIsCustomModalOpen] = useState(false)
 
   return (
-    <main className="mx-auto min-h-screen w-full max-w-[480px] px-4 py-6">
-      <header className="mb-5">
+    <main className="mx-auto min-h-screen w-full max-w-[480px] px-6 py-12">
+      <header className="mb-8 text-center">
         <p className="text-xs tracking-[0.24em] text-[#8F9A89]">BLOOM BREATH</p>
-        <h1 className="mt-1 text-2xl font-semibold text-[#566458]">Calm breathing pomodoro</h1>
-        <p className="mt-1 text-sm text-[#7E857B]">
-          Follow a technique, grow flowers around your timer, and collect blooms in your garden.
+        <h1 className="mt-2 text-3xl font-medium tracking-wide text-[#3A3A3A]">Breathe and Bloom</h1>
+        <p className="mt-2 text-sm text-[#6F7568]">
+          Grow calm with every breath and collect each bloom in your peaceful garden.
         </p>
       </header>
 

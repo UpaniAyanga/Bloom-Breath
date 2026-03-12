@@ -1,3 +1,4 @@
+import { AnimatePresence, motion } from 'framer-motion'
 import type { BreathingPhase } from '../data/breathingTechniques'
 
 interface TimerDisplayProps {
@@ -18,10 +19,21 @@ export default function TimerDisplay({
   progress,
 }: TimerDisplayProps) {
   return (
-    <div className="text-center">
-      <p className="text-xs tracking-[0.3em] text-[#7A8D76]">{phaseLabelMap[currentPhase]}</p>
-      <p className="mt-1 text-4xl font-semibold text-[#566458]">{secondsRemaining}s</p>
-      <p className="mt-2 text-xs text-[#8A8A87]">{Math.round(progress)}% complete</p>
+    <div className="mt-6 text-center">
+      <AnimatePresence mode="wait">
+        <motion.p
+          key={currentPhase}
+          initial={{ opacity: 0, y: 6 }}
+          animate={{ opacity: 1, y: 0 }}
+          exit={{ opacity: 0, y: -6 }}
+          transition={{ duration: 0.5, ease: 'easeInOut' }}
+          className="text-4xl font-semibold tracking-widest uppercase text-[#6B705C]"
+        >
+          {phaseLabelMap[currentPhase]}
+        </motion.p>
+      </AnimatePresence>
+      <p className="mt-2 text-5xl font-semibold text-[#55604E]">{secondsRemaining}s</p>
+      <p className="mt-2 text-xs tracking-[0.22em] text-[#8A8A87]">{Math.round(progress)}% COMPLETE</p>
     </div>
   )
 }
