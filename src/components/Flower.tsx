@@ -1,4 +1,4 @@
-import { motion } from 'framer-motion'
+import { motion, useReducedMotion } from 'framer-motion'
 import { useMemo } from 'react'
 
 export type FlowerStage = 'seed' | 'sprout' | 'stem' | 'bud' | 'flower'
@@ -48,6 +48,8 @@ export default function Flower({
   delay = 0,
   seed = 1001,
 }: FlowerProps) {
+  const shouldReduceMotion = useReducedMotion()
+
   const variation = useMemo(() => {
     const random = createSeededRandom(seed)
     const palette = ['#FFC8DD', '#FFAFCC', '#CDB4DB', '#BDE0FE', '#A2D2FF']
@@ -73,17 +75,17 @@ export default function Flower({
 
   return (
     <motion.div
-      initial={{ scale: 0, opacity: 0 }}
+      initial={shouldReduceMotion ? false : { scale: 0, opacity: 0 }}
       animate={
-        float
+        float && !shouldReduceMotion
           ? { scale: stageScaleMap[stage], opacity: stageOpacityMap[stage], y: [0, -3, 0] }
           : { scale: stageScaleMap[stage], opacity: stageOpacityMap[stage] }
       }
       transition={{
-        duration: float ? 5.2 : 0.8,
+        duration: shouldReduceMotion ? 0.25 : float ? 5.2 : 0.8,
         delay,
         ease: 'easeInOut',
-        repeat: float ? Number.POSITIVE_INFINITY : 0,
+        repeat: float && !shouldReduceMotion ? Number.POSITIVE_INFINITY : 0,
       }}
       style={{ width: size, height: size }}
     >
@@ -91,7 +93,7 @@ export default function Flower({
         viewBox="0 0 100 100"
         className="h-full w-full"
         animate={{ scale: stageScaleMap[stage], opacity: stageOpacityMap[stage] }}
-        transition={{ duration: 1.2, ease: 'easeOut' }}
+        transition={{ duration: shouldReduceMotion ? 0.2 : 1.2, ease: 'easeOut' }}
       >
         {(stage === 'sprout' ||
           stage === 'stem' ||

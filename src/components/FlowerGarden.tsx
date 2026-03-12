@@ -18,8 +18,8 @@ export default function FlowerGarden({ flowers, progress }: FlowerGardenProps) {
   return (
     <section className="rounded-3xl border border-[#E9E4DB] bg-[#FDFBF7] p-4 shadow-[0_8px_30px_rgba(131,140,127,0.12)]">
       <div className="mb-3 flex items-center justify-between">
-        <h2 className="text-base font-medium tracking-wide text-[#566458]">Your breathing garden</h2>
-        <span className="text-xs text-[#8A8A87]">{flowers.length} blooms</span>
+        <h2 className="text-sm font-medium tracking-[0.12em] uppercase text-[#6B705C]">Your breathing garden</h2>
+        <span className="text-xs tracking-[0.08em] text-[#8A8A87]">{flowers.length} blooms</span>
       </div>
 
       <div

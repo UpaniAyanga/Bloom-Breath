@@ -1,5 +1,5 @@
 import { useMemo } from 'react'
-import { motion } from 'framer-motion'
+import { motion, useReducedMotion } from 'framer-motion'
 import Flower, { type FlowerStage } from './Flower'
 
 interface GardenProps {
@@ -34,6 +34,7 @@ function stageFromProgress(progress: number): FlowerStage {
 }
 
 export default function Garden({ progress }: GardenProps) {
+  const shouldReduceMotion = useReducedMotion()
   const normalizedProgress = Math.max(0, Math.min(100, progress))
   const totalFlowers = 6
 
@@ -57,7 +58,9 @@ export default function Garden({ progress }: GardenProps) {
 
   return (
     <section className="mt-10 w-full max-w-md">
-      <p className="text-center text-sm font-medium tracking-wide text-[#6F7568]">Your breathing garden</p>
+      <p className="text-center text-sm font-medium tracking-[0.12em] uppercase text-[#6B705C]">
+        Your breathing garden
+      </p>
 
       <div className="mt-4 flex w-full items-end justify-center gap-6">
         {flowers.map((flower, index) => (
@@ -65,7 +68,7 @@ export default function Garden({ progress }: GardenProps) {
             key={flower.id}
             className="flex items-end"
             style={{ marginBottom: `${flower.lift}px` }}
-            animate={{ y: [0, -2, 0] }}
+            animate={shouldReduceMotion ? undefined : { y: [0, -2, 0] }}
             transition={{
               duration: 5 + index * 0.3,
               repeat: Number.POSITIVE_INFINITY,
@@ -77,7 +80,7 @@ export default function Garden({ progress }: GardenProps) {
               seed={flower.seed}
               stage={stage}
               size={flower.size}
-              float={stage === 'flower'}
+              float={stage === 'flower' && !shouldReduceMotion}
               delay={index * 0.08}
             />
           </motion.div>

@@ -64,9 +64,9 @@ export default function TimerPage({
       </button>
 
       <header className="mt-6 text-center">
-        <h1 className="text-3xl font-medium tracking-wide text-[#3A3A3A]">Breathe and Bloom</h1>
+        <h1 className="text-3xl font-medium tracking-[0.02em] text-[#3A3A3A]">Breathe and Bloom</h1>
         <p className="mt-2 text-sm text-[#6F7568]">Grow calm with every breath</p>
-        <p className="mt-1 text-xs tracking-[0.15em] text-[#8C9087] uppercase">{technique.name}</p>
+        <p className="mt-1 text-xs font-medium tracking-[0.15em] text-[#8C9087] uppercase">{technique.name}</p>
       </header>
 
       <section className="mt-8 flex w-full flex-col items-center rounded-3xl bg-[#FDFBF7]/65 p-6 shadow-[0_14px_44px_rgba(131,140,127,0.14)]">

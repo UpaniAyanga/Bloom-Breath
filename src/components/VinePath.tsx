@@ -1,4 +1,4 @@
-import { motion } from 'framer-motion'
+import { motion, useReducedMotion } from 'framer-motion'
 import { useEffect, useMemo, useRef, useState } from 'react'
 
 interface VinePathProps {
@@ -92,6 +92,7 @@ function randomInRange(random: () => number, min: number, max: number) {
 }
 
 export default function VinePath({ progress }: VinePathProps) {
+  const shouldReduceMotion = useReducedMotion()
   const pathRefs = useRef<Array<SVGPathElement | null>>([])
   const [pathLengths, setPathLengths] = useState<number[]>([])
   const normalizedProgress = Math.max(0, Math.min(100, progress))
@@ -151,7 +152,7 @@ export default function VinePath({ progress }: VinePathProps) {
               strokeDashoffset,
             }}
             animate={{ strokeDashoffset }}
-            transition={{ duration: 1.1, ease: 'easeOut' }}
+            transition={{ duration: shouldReduceMotion ? 0.2 : 1.1, ease: 'easeOut' }}
           />
         )
       })}
@@ -170,7 +171,7 @@ export default function VinePath({ progress }: VinePathProps) {
             transform={`rotate(${leaf.rotation} ${leaf.x} ${leaf.y})`}
             initial={{ opacity: 0, scale: 0.75 }}
             animate={{ opacity: visible ? 0.82 : 0, scale: visible ? 1 : 0.75 }}
-            transition={{ duration: 1, ease: 'easeOut' }}
+            transition={{ duration: shouldReduceMotion ? 0.2 : 1, ease: 'easeOut' }}
           />
         )
       })}

@@ -1,4 +1,4 @@
-import { motion } from 'framer-motion'
+import { motion, useReducedMotion } from 'framer-motion'
 import { useMemo } from 'react'
 
 interface ParticleSeed {
@@ -11,6 +11,7 @@ interface ParticleSeed {
   delay: number
   peakOpacity: number
   color: string
+  top: number
 }
 
 function createSeededRandom(seed: number) {
@@ -26,6 +27,8 @@ function randomInRange(random: () => number, min: number, max: number) {
 }
 
 export default function PollenParticles() {
+  const shouldReduceMotion = useReducedMotion()
+
   const particles = useMemo<ParticleSeed[]>(() => {
     // Particle seeds are created once so animation stays lightweight and stable.
     const random = createSeededRandom(20260312)
@@ -42,6 +45,7 @@ export default function PollenParticles() {
       delay: -randomInRange(random, 0, 24),
       peakOpacity: randomInRange(random, 0.3, 0.5),
       color: palette[Math.floor(random() * palette.length)],
+      top: randomInRange(random, 18, 88),
     }))
   }, [])
 
@@ -55,21 +59,30 @@ export default function PollenParticles() {
             width: particle.size,
             height: particle.size,
             left: `${particle.left}%`,
-            bottom: '-7%',
+            bottom: shouldReduceMotion ? 'auto' : '-7%',
+            top: shouldReduceMotion ? `${particle.top}%` : undefined,
             backgroundColor: particle.color,
           }}
-          initial={{ y: 0, x: 0, opacity: 0 }}
-          animate={{
-            y: -particle.riseDistance,
-            x: [0, particle.driftX, 0],
-            opacity: [0, particle.peakOpacity, 0],
-          }}
-          transition={{
-            duration: particle.duration,
-            delay: particle.delay,
-            repeat: Number.POSITIVE_INFINITY,
-            ease: 'easeInOut',
-          }}
+          initial={shouldReduceMotion ? undefined : { y: 0, x: 0, opacity: 0 }}
+          animate={
+            shouldReduceMotion
+              ? { opacity: particle.peakOpacity * 0.5 }
+              : {
+                  y: -particle.riseDistance,
+                  x: [0, particle.driftX, 0],
+                  opacity: [0, particle.peakOpacity, 0],
+                }
+          }
+          transition={
+            shouldReduceMotion
+              ? { duration: 0.2, ease: 'linear' }
+              : {
+                  duration: particle.duration,
+                  delay: particle.delay,
+                  repeat: Number.POSITIVE_INFINITY,
+                  ease: 'easeInOut',
+                }
+          }
         />
       ))}
     </div>
