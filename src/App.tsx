@@ -2,7 +2,6 @@ import { useMemo, useState } from 'react'
 import { breathingTechniques, type BreathingTechnique } from './data/breathingTechniques'
 import { createRandomBloomVariant, type BloomVariant } from './data/bloomVariants'
 import type { GardenFlower } from './components/FlowerGarden'
-import FloralBackground from './components/FloralBackground'
 import PollenParticles from './components/PollenParticles'
 import SkyGradient from './components/SkyGradient'
 import Home from './pages/Home'
@@ -48,7 +47,6 @@ export default function App() {
   return (
     <div className="relative min-h-screen overflow-hidden bg-[#F8F6F2]">
       <SkyGradient />
-      <FloralBackground />
       <PollenParticles />
 
       <div className="relative z-10">
